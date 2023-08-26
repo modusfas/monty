@@ -1,29 +1,37 @@
 #include "monty.h"
-
 /**
- * push - push  stack value
- * @stack: pointer to a pointer
- * @value: number
- *
- * Return: zero on success
- */
-void push(stack_t **stack, int value)
+ * f_push - add node to the stack
+ * @head: stack head
+ * @counter: line_number
+ * Return: nothing
+*/
+void f_push(stack_t **head, unsigned int counter)
 {
-	stack_t *new_node = malloc(sizeof(stack_t));
+	int n, k = 0, flag = 0;
 
-	if (new_node == NULL)
+	if (bus.arg)
 	{
-		fprintf(stderr, "Memory allocation failed\n");
-		exit(EXIT_FAILURE);
-	}
-
-	new_node->n = value;
-	new_node->prev = NULL;
-	new_node->next = *stack;
-
-	if (*stack != NULL)
-	{
-		(*stack)->prev = new_node;
-	}
-	*stack = new_node;
+		if (bus.arg[0] == '-')
+			k++;
+		for (; bus.arg[k] != '\0'; k++)
+		{
+			if (bus.arg[k] > 57 || bus.arg[k] < 48)
+				flag = 1; }
+		if (flag == 1)
+		{ fprintf(stderr, "L%d: usage: push integer\n", counter);
+			fclose(bus.file);
+			free(bus.content);
+			free_stack(*head);
+			exit(EXIT_FAILURE); }}
+	else
+	{ fprintf(stderr, "L%d: usage: push integer\n", counter);
+		fclose(bus.file);
+		free(bus.content);
+		free_stack(*head);
+		exit(EXIT_FAILURE); }
+	n = atoi(bus.arg);
+	if (bus.lifi == 0)
+		addnode(head, n);
+	else
+		addqueue(head, n);
 }
